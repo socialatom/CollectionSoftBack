@@ -1,0 +1,1081 @@
+---
+swagger: "2.0"
+info:
+  description: "This is the api for the astorga collections backend"
+  version: "1.0.0"
+  title: "Astorga Collections Backend API"
+  contact:
+    email: "sumeru.chatterjee@me.com"
+host: "api.astorgacollections.com"
+basePath: "/prod"
+tags:
+- name: "Universal Calls"
+  description: "These calls can made by all users."
+- name: "Staff Calls"
+  description: "These calls can only be made by staffadmin. For staff they can be\
+    \ called for only the current staff user to update or get their own profile."
+- name: "Student Calls"
+  description: "These calls can only be made by staffadmin and staff users. For students\
+    \ they can be called for only the current student user to update or get their\
+    \ own profile."
+- name: "ISA Calls"
+  description: "These calls can only be made by staffadmin and staff users. For students\
+    \ they can be called for only the current student user to update or get their\
+    \ own ISA."
+schemes:
+- "https"
+paths:
+  /user:
+    get:
+      tags:
+      - "Universal Calls"
+      summary: "Gets the user details"
+      description: "This call gets the details of the current user."
+      operationId: "user"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "user"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "UniversalCalls"
+  /dashboard:
+    get:
+      tags:
+      - "Universal Calls"
+      summary: "Gets the user dashboard data"
+      description: "This call gets the dashboard data for the current user."
+      operationId: "dashboard"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "user"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "UniversalCalls"
+  /staff:
+    get:
+      tags:
+      - "Staff Calls"
+      summary: "Lists all staff users"
+      description: "This call lists all staff users"
+      operationId: "listStaff"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "list of staff users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Staff"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StaffCalls"
+    post:
+      tags:
+      - "Staff Calls"
+      summary: "Creates a new staff user"
+      description: "This call creates a new staff user."
+      operationId: "createStaff"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "staff"
+        description: "Staff details for the new user."
+        required: true
+        schema:
+          $ref: "#/definitions/CreateStaff"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Staff"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StaffCalls"
+  '/staff/{staffId}:':
+    get:
+      tags:
+      - "Staff Calls"
+      summary: "Gets a staff user"
+      description: "This call gets a staff user."
+      operationId: "getStaffByID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "staffId"
+        in: "path"
+        description: "staffId of staff to return"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Staff"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StaffCalls"
+    put:
+      tags:
+      - "Staff Calls"
+      summary: "Updates a staff user"
+      description: "This call updates a staff user."
+      operationId: "updateStaff"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "staffId"
+        in: "path"
+        description: "staffId of user to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "staff"
+        description: "Staff details for the user to be updated."
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateStaff"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Staff"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StaffCalls"
+    delete:
+      tags:
+      - "Staff Calls"
+      summary: "Deletes a staff user"
+      description: "This call deletes a staff user."
+      operationId: "deleteStaffById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "staffId"
+        in: "path"
+        description: "staffId of staff to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StaffCalls"
+  /student:
+    get:
+      tags:
+      - "Student Calls"
+      summary: "Lists all student users"
+      description: "This call lists all student users"
+      operationId: "listStudent"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "list of student users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Student"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StudentCalls"
+    post:
+      tags:
+      - "Student Calls"
+      summary: "Creates a new student user"
+      description: "This call creates a new student user."
+      operationId: "createStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "student"
+        description: "Student details for the new user."
+        required: true
+        schema:
+          $ref: "#/definitions/CreateStudent"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Student"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StudentCalls"
+  '/student/{studentId}:':
+    get:
+      tags:
+      - "Student Calls"
+      summary: "Gets a student user"
+      description: "This call gets a student user."
+      operationId: "getStudentByID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student to return"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Student"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StudentCalls"
+    put:
+      tags:
+      - "Student Calls"
+      summary: "Updates a student user"
+      description: "This call updates a student user."
+      operationId: "updateStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of user to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "student"
+        description: "Student details for the user to be updated."
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateStudent"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Student"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StudentCalls"
+    delete:
+      tags:
+      - "Student Calls"
+      summary: "Deletes a student user"
+      description: "This call deletes a student user."
+      operationId: "deleteStudentById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student user to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "StudentCalls"
+  '/isa/{studentId}:':
+    get:
+      tags:
+      - "ISA Calls"
+      summary: "Gets a student user isa for a given student"
+      description: "This call gets a student user ISA."
+      operationId: "getStudentISAByID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/StudentISA"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "ISACalls"
+    post:
+      tags:
+      - "ISA Calls"
+      summary: "Creates a new student isa for a student if there is none already."
+      description: "This call creates a new student ISA."
+      operationId: "createStudentISA"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "studentISA"
+        description: "Student ISA details for the new user."
+        required: true
+        schema:
+          $ref: "#/definitions/CreateStudentISA"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/StudentISA"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "ISACalls"
+    put:
+      tags:
+      - "ISA Calls"
+      summary: "Updates a student ISA"
+      description: "This call updates a student ISA."
+      operationId: "updateStudentISA"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "student"
+        description: "Student ISA details to be updated."
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateStudentISA"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/StudentISA"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "ISACalls"
+    delete:
+      tags:
+      - "ISA Calls"
+      summary: "Deletes a student user usa"
+      description: "This call deletes a student ISA."
+      operationId: "deleteStudentISAById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "studentId of student"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal Server Error"
+      x-swagger-router-controller: "ISACalls"
+definitions:
+  User:
+    type: "object"
+    required:
+    - "userCreateDate"
+    - "userFirstName"
+    - "userGroup"
+    - "userId"
+    - "userLastName"
+    - "userStatus"
+    properties:
+      userId:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      userFirstName:
+        type: "string"
+        example: "Andres"
+      userLastName:
+        type: "string"
+        example: "Rojas"
+      userStatus:
+        type: "string"
+        example: "CONFIRMED"
+        enum:
+        - "CONFIRMED"
+        - "PENDING_VERIFICATION"
+        - "PASSWORD_RESET_REQUIRED"
+      userCreateDate:
+        type: "string"
+        format: "date"
+        example: "2020-01-31T02:42:53.468Z"
+      userGroup:
+        type: "string"
+        example: "staff"
+    example:
+      userStatus: "CONFIRMED"
+      userLastName: "Rojas"
+      userCreateDate: "2020-01-31T02:42:53.468Z"
+      userFirstName: "Andres"
+      userId: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      userGroup: "staff"
+  CreateStaff:
+    type: "object"
+    required:
+    - "staffCampus"
+    - "staffEmail"
+    - "staffFirstName"
+    - "staffLastName"
+    properties:
+      staffFirstName:
+        type: "string"
+        example: "Andres"
+      staffLastName:
+        type: "string"
+        example: "Rojas"
+      staffEmail:
+        type: "string"
+        format: "email"
+        example: "andres@andres.com"
+      staffCampus:
+        type: "string"
+        example: "Cali"
+    example:
+      staffFirstName: "Andres"
+      staffLastName: "Rojas"
+      staffEmail: "andres@andres.com"
+      staffCampus: "Cali"
+  UpdateStaff:
+    type: "object"
+    properties:
+      staffFirstName:
+        type: "string"
+        example: "Andres"
+      staffLastName:
+        type: "string"
+        example: "Rojas"
+      staffCampus:
+        type: "string"
+        example: "Cali"
+      staffPosition:
+        type: "string"
+        example: "Software Engineer"
+      staffImage:
+        type: "string"
+        example: "1100001-1000100-1000101"
+    example:
+      staffFirstName: "Andres"
+      staffLastName: "Rojas"
+      staffImage: "1100001-1000100-1000101"
+      staffCampus: "Cali"
+      staffPosition: "Software Engineer"
+  Staff:
+    type: "object"
+    required:
+    - "staffCampus"
+    - "staffEmail"
+    - "staffFirstName"
+    - "staffLastName"
+    properties:
+      staffId:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      staffFirstName:
+        type: "string"
+        example: "Andres"
+      staffLastName:
+        type: "string"
+        example: "Rojas"
+      staffEmail:
+        type: "string"
+        format: "email"
+        example: "andres@andres.com"
+      staffCampus:
+        type: "string"
+        example: "Cali"
+      staffPosition:
+        type: "string"
+        example: "Software Engineer"
+      staffImage:
+        type: "string"
+        example: "1100001-1000100-1000101"
+    example:
+      staffFirstName: "Andres"
+      staffLastName: "Rojas"
+      staffEmail: "andres@andres.com"
+      staffImage: "1100001-1000100-1000101"
+      staffCampus: "Cali"
+      staffId: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      staffPosition: "Software Engineer"
+  CreateStudent:
+    type: "object"
+    required:
+    - "studentCampus"
+    - "studentEmail"
+    - "studentFirstName"
+    - "studentIdentificationNumber"
+    - "studentIdentificationType"
+    - "studentLastName"
+    properties:
+      studentFirstName:
+        type: "string"
+        example: "Sumeru"
+      studentLastName:
+        type: "string"
+        example: "Chatterjee"
+      studentEmail:
+        type: "string"
+        format: "email"
+        example: "sumeru@sumeru.com"
+      studentCampus:
+        type: "string"
+        example: "Cali"
+      studentIdentificationType:
+        type: "string"
+        example: "Driving License"
+      studentIdentificationNumber:
+        type: "string"
+        example: "1233555665"
+    example:
+      studentLastName: "Chatterjee"
+      studentEmail: "sumeru@sumeru.com"
+      studentCampus: "Cali"
+      studentIdentificationNumber: "1233555665"
+      studentFirstName: "Sumeru"
+      studentIdentificationType: "Driving License"
+  UpdateStudent:
+    type: "object"
+    properties:
+      studentFirstName:
+        type: "string"
+        example: "Sumeru"
+      studentLastName:
+        type: "string"
+        example: "Chatterjee"
+      studentEmail:
+        type: "string"
+        format: "email"
+        example: "sumeru@sumeru.com"
+      studentCampus:
+        type: "string"
+        example: "Cali"
+      studentIdentificationType:
+        type: "string"
+        example: "Driving License"
+      studentIdentificationNumber:
+        type: "string"
+        example: "1233555665"
+      studentAddressLine1:
+        type: "string"
+        example: "Bas Paauwestraat 11"
+      studentAddressLine2:
+        type: "string"
+        example: "1st Floor"
+      studentAddressCity:
+        type: "string"
+        example: "Rotterdam"
+      studentProvince:
+        type: "string"
+        example: "Zuid Holland"
+      studentAddressPostalCode:
+        type: "string"
+        example: "3077 MP"
+      studentAddressCountry:
+        type: "string"
+        example: "Netherlands"
+      studentPhoneNumber:
+        type: "string"
+        example: "+31638146100"
+      studentBirthDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21"
+      studentImage:
+        type: "string"
+        example: "1122001-12200100-1000101"
+    example:
+      studentLastName: "Chatterjee"
+      studentBirthDate: "2017-07-21"
+      studentAddressPostalCode: "3077 MP"
+      studentPhoneNumber: "+31638146100"
+      studentImage: "1122001-12200100-1000101"
+      studentProvince: "Zuid Holland"
+      studentIdentificationNumber: "1233555665"
+      studentIdentificationType: "Driving License"
+      studentEmail: "sumeru@sumeru.com"
+      studentAddressCity: "Rotterdam"
+      studentAddressCountry: "Netherlands"
+      studentCampus: "Cali"
+      studentAddressLine2: "1st Floor"
+      studentFirstName: "Sumeru"
+      studentAddressLine1: "Bas Paauwestraat 11"
+  Student:
+    type: "object"
+    required:
+    - "studentCampus"
+    - "studentEmail"
+    - "studentFirstName"
+    - "studentIdentificationNumber"
+    - "studentIdentificationType"
+    - "studentLastName"
+    - "studentProfileId"
+    properties:
+      studentProfileId:
+        type: "string"
+        format: "uuid"
+        example: "12000022-6c54-4b01-90e6-d701748f0851"
+      studentFirstName:
+        type: "string"
+        example: "Sumeru"
+      studentLastName:
+        type: "string"
+        example: "Chatterjee"
+      studentEmail:
+        type: "string"
+        format: "email"
+        example: "sumeru@sumeru.com"
+      studentCampus:
+        type: "string"
+        example: "Cali"
+      studentIdentificationType:
+        type: "string"
+        example: "Driving License"
+      studentIdentificationNumber:
+        type: "string"
+        example: "1233555665"
+      studentAddressLine1:
+        type: "string"
+        example: "Bas Paauwestraat 11"
+      studentAddressLine2:
+        type: "string"
+        example: "1st Floor"
+      studentAddressCity:
+        type: "string"
+        example: "Rotterdam"
+      studentProvince:
+        type: "string"
+        example: "Zuid Holland"
+      studentAddressPostalCode:
+        type: "string"
+        example: "3077 MP"
+      studentAddressCountry:
+        type: "string"
+        example: "Netherlands"
+      studentPhoneNumber:
+        type: "string"
+        example: "+31638146100"
+      studentBirthDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21"
+      studentImage:
+        type: "string"
+        example: "1122001-12200100-1000101"
+    example:
+      studentLastName: "Chatterjee"
+      studentBirthDate: "2017-07-21"
+      studentAddressPostalCode: "3077 MP"
+      studentPhoneNumber: "+31638146100"
+      studentImage: "1122001-12200100-1000101"
+      studentProvince: "Zuid Holland"
+      studentProfileId: "12000022-6c54-4b01-90e6-d701748f0851"
+      studentIdentificationNumber: "1233555665"
+      studentIdentificationType: "Driving License"
+      studentEmail: "sumeru@sumeru.com"
+      studentAddressCity: "Rotterdam"
+      studentAddressCountry: "Netherlands"
+      studentCampus: "Cali"
+      studentAddressLine2: "1st Floor"
+      studentFirstName: "Sumeru"
+      studentAddressLine1: "Bas Paauwestraat 11"
+  CreateStudentISA:
+    type: "object"
+    required:
+    - "studentISAAcademyOperator"
+    - "studentISAAcademyOperatorAddress"
+    - "studentISAAcademyOperatorEmail"
+    - "studentISAAcademyOperatorGovID"
+    - "studentISAAgreementDurationMonths"
+    - "studentISACampus"
+    - "studentISACap"
+    - "studentISACohort"
+    - "studentISACohortStartDate"
+    - "studentISACollectionCompany"
+    - "studentISACollectionCompanyAddress"
+    - "studentISACollectionCompanyEmail"
+    - "studentISACollectionCompanyGovId"
+    - "studentISAFiduciary"
+    - "studentISAFiduciaryGovID"
+    - "studentISAIncomeSharePercentage"
+    - "studentISAMaxContractValidity"
+    - "studentISAMinimumIncome"
+    - "studentISAMonthlyInstallments"
+    - "studentISAProgram"
+    - "studentISATrustFund"
+    properties:
+      studentISAProgram:
+        type: "string"
+        example: "Software Developer"
+      studentISACap:
+        type: "integer"
+        example: 75000000
+      studentISAMinimumIncome:
+        type: "integer"
+        example: 3000000
+      studentISAIncomeSharePercentage:
+        type: "integer"
+        example: 17
+      studentISAAgreementDurationMonths:
+        type: "integer"
+        example: 21
+      studentISAMonthlyInstallments:
+        type: "integer"
+        example: 42
+      studentISAMaxContractValidity:
+        type: "integer"
+        example: 72
+      studentISATrustFund:
+        type: "string"
+        example: "FudiOccidente"
+      studentISAFiduciary:
+        type: "string"
+        example: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID:
+        type: "string"
+        example: "234234234-nn22"
+      studentISAAcademyOperator:
+        type: "string"
+        example: "Coderise ORG"
+      studentISAAcademyOperatorGovID:
+        type: "string"
+        example: "901.114. 515-1"
+      studentISAAcademyOperatorEmail:
+        type: "string"
+        format: "email"
+        example: "holberton@coderise.org"
+      studentISAAcademyOperatorAddress:
+        type: "string"
+        example: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISACollectionCompany:
+        type: "string"
+        example: "Astorga Management"
+      studentISACollectionCompanyGovId:
+        type: "string"
+        example: "2839302023jj"
+      studentISACollectionCompanyEmail:
+        type: "string"
+        format: "email"
+        example: "astorga@astorga.com"
+      studentISACollectionCompanyAddress:
+        type: "string"
+        example: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISACampus:
+        type: "string"
+        example: "Cali"
+      studentISACohort:
+        type: "string"
+        example: "11"
+      studentISACohortStartDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21"
+    example:
+      studentISAMinimumIncome: 3000000
+      studentISACampus: "Cali"
+      studentISACollectionCompany: "Astorga Management"
+      studentISACollectionCompanyAddress: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISAAcademyOperatorGovID: "901.114. 515-1"
+      studentISAProgram: "Software Developer"
+      studentISAAgreementDurationMonths: 21
+      studentISATrustFund: "FudiOccidente"
+      studentISAAcademyOperator: "Coderise ORG"
+      studentISACohortStartDate: "2017-07-21"
+      studentISAFiduciary: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID: "234234234-nn22"
+      studentISACohort: "11"
+      studentISAIncomeSharePercentage: 17
+      studentISAMaxContractValidity: 72
+      studentISACollectionCompanyGovId: "2839302023jj"
+      studentISAMonthlyInstallments: 42
+      studentISACap: 75000000
+      studentISACollectionCompanyEmail: "astorga@astorga.com"
+      studentISAAcademyOperatorAddress: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISAAcademyOperatorEmail: "holberton@coderise.org"
+  UpdateStudentISA:
+    type: "object"
+    properties:
+      studentISAProgram:
+        type: "string"
+        example: "Software Developer"
+      studentISACap:
+        type: "integer"
+        example: 75000000
+      studentISAMinimumIncome:
+        type: "integer"
+        example: 3000000
+      studentISAIncomeSharePercentage:
+        type: "integer"
+        example: 17
+      studentISAAgreementDurationMonths:
+        type: "integer"
+        example: 21
+      studentISAMonthlyInstallments:
+        type: "integer"
+        example: 42
+      studentISAMaxContractValidity:
+        type: "integer"
+        example: 72
+      studentISATrustFund:
+        type: "string"
+        example: "FudiOccidente"
+      studentISAFiduciary:
+        type: "string"
+        example: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID:
+        type: "string"
+        example: "234234234-nn22"
+      studentISAAcademyOperator:
+        type: "string"
+        example: "Coderise ORG"
+      studentISAAcademyOperatorGovID:
+        type: "string"
+        example: "901.114. 515-1"
+      studentISAAcademyOperatorEmail:
+        type: "string"
+        format: "email"
+        example: "holberton@coderise.org"
+      studentISAAcademyOperatorAddress:
+        type: "string"
+        example: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISACollectionCompany:
+        type: "string"
+        example: "Astorga Management"
+      studentISACollectionCompanyGovId:
+        type: "string"
+        example: "2839302023jj"
+      studentISACollectionCompanyEmail:
+        type: "string"
+        format: "email"
+        example: "astorga@astorga.com"
+      studentISACollectionCompanyAddress:
+        type: "string"
+        example: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISACampus:
+        type: "string"
+        example: "Cali"
+      studentISACohort:
+        type: "string"
+        example: "11"
+      studentISACohortStartDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21"
+    example:
+      studentISAMinimumIncome: 3000000
+      studentISACampus: "Cali"
+      studentISACollectionCompany: "Astorga Management"
+      studentISACollectionCompanyAddress: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISAAcademyOperatorGovID: "901.114. 515-1"
+      studentISAProgram: "Software Developer"
+      studentISAAgreementDurationMonths: 21
+      studentISATrustFund: "FudiOccidente"
+      studentISAAcademyOperator: "Coderise ORG"
+      studentISACohortStartDate: "2017-07-21"
+      studentISAFiduciary: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID: "234234234-nn22"
+      studentISACohort: "11"
+      studentISAIncomeSharePercentage: 17
+      studentISAMaxContractValidity: 72
+      studentISACollectionCompanyGovId: "2839302023jj"
+      studentISAMonthlyInstallments: 42
+      studentISACap: 75000000
+      studentISACollectionCompanyEmail: "astorga@astorga.com"
+      studentISAAcademyOperatorAddress: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISAAcademyOperatorEmail: "holberton@coderise.org"
+  StudentISA:
+    type: "object"
+    required:
+    - "studentISAAcademyOperator"
+    - "studentISAAcademyOperatorAddress"
+    - "studentISAAcademyOperatorEmail"
+    - "studentISAAcademyOperatorGovID"
+    - "studentISAAgreementDurationMonths"
+    - "studentISACampus"
+    - "studentISACap"
+    - "studentISACohort"
+    - "studentISACohortStartDate"
+    - "studentISACollectionCompany"
+    - "studentISACollectionCompanyAddress"
+    - "studentISACollectionCompanyEmail"
+    - "studentISACollectionCompanyGovId"
+    - "studentISAFiduciary"
+    - "studentISAFiduciaryGovID"
+    - "studentISAIncomeSharePercentage"
+    - "studentISAMaxContractValidity"
+    - "studentISAMinimumIncome"
+    - "studentISAMonthlyInstallments"
+    - "studentISAProgram"
+    - "studentISATrustFund"
+    - "studentId"
+    properties:
+      studentId:
+        type: "string"
+        format: "uuid"
+        example: "12000022-6c54-4b01-90e6-d701748f0851"
+      studentISAProgram:
+        type: "string"
+        example: "Software Developer"
+      studentISACap:
+        type: "integer"
+        example: 75000000
+      studentISAMinimumIncome:
+        type: "integer"
+        example: 3000000
+      studentISAIncomeSharePercentage:
+        type: "integer"
+        example: 17
+      studentISAAgreementDurationMonths:
+        type: "integer"
+        example: 21
+      studentISAMonthlyInstallments:
+        type: "integer"
+        example: 42
+      studentISAMaxContractValidity:
+        type: "integer"
+        example: 72
+      studentISATrustFund:
+        type: "string"
+        example: "FudiOccidente"
+      studentISAFiduciary:
+        type: "string"
+        example: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID:
+        type: "string"
+        example: "234234234-nn22"
+      studentISAAcademyOperator:
+        type: "string"
+        example: "Coderise ORG"
+      studentISAAcademyOperatorGovID:
+        type: "string"
+        example: "901.114. 515-1"
+      studentISAAcademyOperatorEmail:
+        type: "string"
+        format: "email"
+        example: "holberton@coderise.org"
+      studentISAAcademyOperatorAddress:
+        type: "string"
+        example: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISACollectionCompany:
+        type: "string"
+        example: "Astorga Management"
+      studentISACollectionCompanyGovId:
+        type: "string"
+        example: "2839302023jj"
+      studentISACollectionCompanyEmail:
+        type: "string"
+        format: "email"
+        example: "astorga@astorga.com"
+      studentISACollectionCompanyAddress:
+        type: "string"
+        example: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISACampus:
+        type: "string"
+        example: "Cali"
+      studentISACohort:
+        type: "string"
+        example: "11"
+      studentISACohortStartDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21"
+    example:
+      studentISAMinimumIncome: 3000000
+      studentISACampus: "Cali"
+      studentISACollectionCompany: "Astorga Management"
+      studentISACollectionCompanyAddress: "Carrera 8 # 122-217, Bogotá, CO"
+      studentISAAcademyOperatorGovID: "901.114. 515-1"
+      studentISAProgram: "Software Developer"
+      studentISAAgreementDurationMonths: 21
+      studentISATrustFund: "FudiOccidente"
+      studentISAAcademyOperator: "Coderise ORG"
+      studentISACohortStartDate: "2017-07-21"
+      studentISAFiduciary: "Fake Fiduciary CO"
+      studentISAFiduciaryGovID: "234234234-nn22"
+      studentISACohort: "11"
+      studentISAIncomeSharePercentage: 17
+      studentISAMaxContractValidity: 72
+      studentISACollectionCompanyGovId: "2839302023jj"
+      studentISAMonthlyInstallments: 42
+      studentId: "12000022-6c54-4b01-90e6-d701748f0851"
+      studentISACap: 75000000
+      studentISACollectionCompanyEmail: "astorga@astorga.com"
+      studentISAAcademyOperatorAddress: "Carrera 7 # 69-17, Bogotá, CO"
+      studentISAAcademyOperatorEmail: "holberton@coderise.org"

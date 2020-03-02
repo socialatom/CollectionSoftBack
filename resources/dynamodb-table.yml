@@ -1,0 +1,40 @@
+Resources:
+  StudentProfilesDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: ${self:custom.studentProfilesTableName}
+      AttributeDefinitions:
+        - AttributeName: studentProfileId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: studentProfileId
+          KeyType: HASH
+      # auto-scale
+      BillingMode: PAY_PER_REQUEST
+  StudentISADynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: ${self:custom.studentISATableName}
+      AttributeDefinitions:
+        - AttributeName: studentId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: studentId
+          KeyType: HASH
+      # auto-scale
+      BillingMode: PAY_PER_REQUEST
+  StaffProfilesDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: ${self:custom.staffProfilesTableName}
+      AttributeDefinitions:
+        - AttributeName: staffProfileId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: staffProfileId
+          KeyType: HASH
+      # auto-scale
+      BillingMode: PAY_PER_REQUEST

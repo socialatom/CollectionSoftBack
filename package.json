@@ -1,0 +1,27 @@
+{
+  "name": "astorgacollections-backend",
+  "version": "1.0.9",
+  "description": "Backend for Astorga Collections",
+  "main": "handler.js",
+  "scripts": {
+    "test": "serverless-bundle test",
+    "integration-test": "./tests/integration/integrationTest.sh"
+  },
+  "author": "Sumeru Chatterjee",
+  "devDependencies": {
+    "aws-sdk": "^2.562.0",
+    "dotenv": "^8.2.0",
+    "mocha": "^6.2.2",
+    "serverless-bundle": "^1.2.5",
+    "serverless-dynamodb-local": "^0.2.38",
+    "serverless-export-env": "github:arabold/serverless-export-env",
+    "serverless-offline": "^5.12.0",
+    "serverless-stack-output": "^0.2.3",
+    "supertest": "^4.0.2",
+    "aws-api-gateway-cli-test": "^1.3.2"
+  },
+  "dependencies": {
+    "@hapi/joi": "^14.3.1",
+    "serverless": "^1.64.0"
+  }
+}

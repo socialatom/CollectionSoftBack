@@ -1,0 +1,86 @@
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    UpdateReplacePolicy: Retain
+    Properties:
+      # Generate a name based on the stage
+      UserPoolName: ${self:custom.userPoolName}
+      # Set email as an alias
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationSubject: "Your Astorga Collections Verification Code"
+      EmailVerificationMessage: "Your Astorga Collections Confirmation code is {####}."
+      Policies:
+          PasswordPolicy:
+            RequireLowercase: false
+            RequireSymbols: false
+            RequireNumbers: true
+            MinimumLength: 6
+            RequireUppercase: false
+  StudentUserRole:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: ${self:custom.studentUserGroupName}
+      Description: A Student User
+      Precedence: 3
+      UserPoolId:
+        Ref: CognitoUserPool
+  StaffUserRole:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: ${self:custom.staffUserGroupName}
+      Description: A Staff User
+      Precedence: 2
+      UserPoolId:
+        Ref: CognitoUserPool
+  StaffAdminUserRole:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: ${self:custom.staffAdminUserGroupName}
+      Description: A Staff Admin User
+      Precedence: 1
+      UserPoolId:
+        Ref: CognitoUserPool
+  AdminUserRole:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: ${self:custom.adminUserGroupName} 
+      Description: An admin user
+      Precedence: 0 
+      UserPoolId:
+        Ref: CognitoUserPool
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    DeletionPolicy: Retain
+    Properties:
+      # Generate an app client name based on the stage
+      ClientName: astorgacollections-${self:custom.stage}-user-pool-client
+      UserPoolId:
+        Ref: CognitoUserPool
+      ExplicitAuthFlows:
+        - ADMIN_NO_SRP_AUTH
+      GenerateSecret: false
+
+# Print out the Id of the User Pool that is created
+Outputs:
+  UserPoolId:
+    Value:
+      Ref: CognitoUserPool
+
+  UserPoolClientId:
+    Value:
+      Ref: CognitoUserPoolClient
+
+  UserPoolProviderName:
+    Value: 
+      Fn::GetAtt: [ CognitoUserPool, ProviderName ]
+  
+  UserPoolProviderURL:
+    Value: 
+      Fn::GetAtt: [ CognitoUserPool, ProviderURL ]
+  
+  UserPoolArn:
+    Value: 
+      Fn::GetAtt: [ CognitoUserPool, Arn ]
