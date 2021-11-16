@@ -9,7 +9,7 @@
   },
   "author": "Sumeru Chatterjee",
   "devDependencies": {
-    "aws-sdk": "^2.562.0",
+    "aws-sdk": "^2.814.0",
     "dotenv": "^8.2.0",
     "mocha": "^6.2.2",
     "serverless-bundle": "^1.2.5",
